@@ -53,6 +53,24 @@ class UserService{
         }
     }
 
+    async isAuthenticated(token){
+        try {
+            const result = await this.verifyToken(token);
+            if(!result){
+                throw {message: "Invalid token"};
+            }
+            const user = await this.userRepository.getById(result.id);
+            if(!user){
+                throw {message: "User not found"};
+            }
+            return user.id;
+        } catch (error) {
+            console.log("Something went wrong in the service layer");
+            throw error;
+        }
+    }
+
+
     verifyToken(token){
         try {
             const result = jwt.verify(token, JWT_SECRET);
