@@ -25,6 +25,24 @@ class UserService{
         }
     }
 
+    async signIn(email, plainPassword){
+        try {
+            const user = await this.userRepository.getByEmail(email);
+           if(!user){
+            throw {message: "User not found"};
+           }
+           const passwordsMatch = this.checkPassword(plainPassword, user.password);
+           if(!passwordsMatch){
+            throw {message: "Incorrect password"};
+           }
+           const newJWT = this.createToken({id: user.id, email: user.email});
+           return newJWT;
+        } catch (error) {
+            console.log("Something went wrong in the service layer");
+            throw error;
+        }
+    }
+
     createToken(user){
         try {
           const result = jwt.sign(user, JWT_SECRET, { expiresIn: '1h' });
@@ -54,6 +72,7 @@ class UserService{
             throw error;
         }
     }
+
 }
 
 module.exports = UserService;
