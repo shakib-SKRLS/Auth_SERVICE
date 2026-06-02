@@ -35,11 +35,11 @@ const signIn = async (req, res) => {
             error: {}
         });
     } catch (error) {
-        res.status(401).json({
-            message: "Invalid email or password",
+        res.status(error.statusCode).json({
+            message: error.message || "Invalid email or password",
             data: [],
             sucess: false,
-            error: error
+            error: error.explaination || "Invalid email or password"
         });
     }
 }
