@@ -16,11 +16,11 @@ const create = async (req, res) => {
             error: {}
         });
     } catch (error) {
-        res.status(500).json({
-            message: "Something went wrong in the controller layer",
+        res.status(error.statusCode || 500).json({
+            message: error.message || "Something went wrong in the controller layer",
             data:[],
             sucess: false,
-            error: error
+            error: error.explaination
         });
     }
 }
