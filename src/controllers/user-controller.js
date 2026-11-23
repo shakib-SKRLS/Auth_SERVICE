@@ -11,7 +11,7 @@ const create = async (req, res) => {
         });
         res.status(201).json({
             message: "User created successfully",
-            data: user,
+            data: { id: user.id, email: user.email },
             sucess: true,
             error: {}
         });
@@ -35,7 +35,7 @@ const signIn = async (req, res) => {
             error: {}
         });
     } catch (error) {
-        res.status(error.statusCode).json({
+        res.status(error.statusCode || 500).json({
             message: error.message || "Invalid email or password",
             data: [],
             sucess: false,
