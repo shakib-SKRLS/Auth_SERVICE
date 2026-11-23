@@ -57,12 +57,22 @@ class UserRepository{
     async isAdmin(userId){
         try {
             const user = await User.findByPk(userId);
+            if(!user){
+                throw new ClientError(
+                    "AttributeNotFound",
+                    "Invalid user id sent in the request",
+                    StatusCodes.NOT_FOUND,
+                    "No user exists with the given id",
+                );
+            }
             const roles = await Role.findOne({
                 where: {
                     name: 'Admin'
                 },
             });
-       
+            if(!roles){
+                return false;
+            }
             return user.hasRole(roles);
         }catch (error) {
             console.log("Something went wrong in the repository layer");
