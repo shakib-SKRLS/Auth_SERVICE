@@ -32,11 +32,11 @@ class UserService{
         try {
             const user = await this.userRepository.getByEmail(email);
            if(!user){
-            throw {message: "User not found"};
+            throw {message: "User not found", statusCode: 404};
            }
            const passwordsMatch = this.checkPassword(plainPassword, user.password);
            if(!passwordsMatch){
-            throw {message: "Incorrect password"};
+            throw {message: "Incorrect password", statusCode: 401};
            }
            const newJWT = this.createToken({id: user.id, email: user.email});
            return newJWT;
